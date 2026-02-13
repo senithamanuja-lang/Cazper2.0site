@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAZPER - Ethical Hacking Learning Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #0080ff;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --light: #e0e0e0;
+            --accent: #ff0055;
+            --success: #00ff88;
+            --purple: #bd00ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 0, 85, 0.05) 0%, transparent 50%);
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo::before {
+            content: "CZ";
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
+            font-weight: 900;
+            border: 2px solid var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 8px;
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 5%;
+            text-align: center;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--purple), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-weight: 900;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.6)); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(224, 224, 224, 0.8);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Sections */
+        section {
+            padding: 4rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Lessons Grid */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .lesson-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .lesson-card:hover::before {
+            left: 100%;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .lesson-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .lesson-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .lesson-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .lesson-card li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        /* Tools Section */
+        .tools-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .tool-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .tool-box h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .password-display {
+            background: var(--dark);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            word-break: break-all;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .strength-meter {
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+
+        .strength-weak { background: var(--accent); width: 33%; }
+        .strength-medium { background: #ffd93d; width: 66%; }
+        .strength-strong { background: var(--success); width: 100%; }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-date {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-card h3 {
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
+
+        .read-more:hover {
+            gap: 1rem;
+        }
+
+        /* Career Section */
+        .career-path {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--purple));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .timeline-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .disclaimer {
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">CAZPER</a>
+            <ul class="nav-links">
+                <li><a href="#lessons">Lessons</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#career">Career</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>CAZPER</h1>
+        <p>Cybersecurity ඉගෙන ගමු! Legal, safe, සහ effective වැඩ පුරුදුවලින් ආරක්ෂාව ඉහළ නංවමු. Hacking වලට එරෙහිව තාක්ෂණය භාවිතා කරමු.</p>
+        <a href="#lessons" class="cta-button">Start Learning</a>
+    </section>
+
+    <!-- Lessons Section -->
+    <section id="lessons">
+        <h2 class="section-title">📚 Beginner Lessons</h2>
+        <div class="lessons-grid">
+            <div class="lesson-card fade-in">
+                <div class="lesson-icon">🔐</div>
+                <h3>Password Safety</h3>
+                <ul>
+                    <li>Strong passwords හදන විදිහ</li>
+                    <li>Password managers භාවිතය</li>
+                    <li>Two-factor authentication (2FA)</li>
+                    <li>Common password mistakes</li>
+                </ul>
+            </div>
+
+            <div class="lesson-card fade-in">
+                <div class="lesson-icon">🎣</div>
+                <h3>Phishing Awareness</h3>
+                <ul>
+                    <li>Phishing emails හඳුනාගන්නේ කෙසේද?</li>
+                    <li>Fake websites වලින් ආරක්ෂා වෙමු</li>
+                    <li>Social engineering tactics</li>
+                    <li>Email verification tips</li>
+                </ul>
+            </div>
+
+            <div class="lesson-card fade-in">
+                <div class="lesson-icon">🌐</div>
+                <h3>Networking Basics</h3>
+                <ul>
+                    <li>IP addresses සහ subnets</li>
+                    <li>TCP/IP protocols</li>
+                    <li>Firewalls සහ ports</li>
+                    <li>Network scanning basics</li>
+                </ul>
+            </div>
+
+            <div class="lesson-card fade-in">
+                <div class="lesson-icon">🐧</div>
+                <h3>Linux Fundamentals</h3>
+                <ul>
+                    <li>Command line basics</li>
+                    <li>File permissions</li>
+                    <li>Basic networking commands</li>
+                    <li>Security tools installation</li>
+                </ul>
+            </div>
+
+            <div class="lesson-card fade-in">
+                <div class="lesson-icon">🛡️</div>
+                <h3>Malware Protection</h3>
+                <ul>
+                    <li>Virus, trojan, ransomware types</li>
+                    <li>Antivirus software selection</li>
+                    <li>Safe browsing habits</li>
+                    <li>System updates importance</li>
+                </ul>
+            </div>
+
+            <div class="lesson-card fade-in">
+                <div class="lesson-icon">⚖️</div>
+                <h3>Legal & Ethics</h3>
+                <ul>
+                    <li>White hat vs black hat</li>
+                    <li>Responsible disclosure</li>
+                    <li>Computer Crime laws</li>
+                    <li>Ethical hacking boundaries</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools">
+        <h2 class="section-title">🛠️ Security Tools</h2>
+        <div class="tools-container">
+            <div class="tool-box fade-in">
+                <h3>🔑 Password Generator</h3>
+                <div class="password-display" id="generatedPassword">Click generate to create password</div>
+                <button class="btn-secondary" onclick="generatePassword()">Generate Strong Password</button>
+                <button class="btn-secondary" onclick="copyPassword()" style="margin-left: 10px;">Copy</button>
+            </div>
+
+            <div class="tool-box fade-in">
+                <h3>💪 Password Strength Checker</h3>
+                <input type="password" id="passwordInput" placeholder="Enter your password..." onkeyup="checkStrength()">
+                <div class="strength-meter">
+                    <div class="strength-bar" id="strengthBar"></div>
+                </div>
+                <p id="strengthText">Enter a password to check strength</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog">
+        <h2 class="section-title">📰 Security Blog</h2>
+        <div class="blog-grid">
+            <article class="blog-card fade-in">
+                <div class="blog-content">
+                    <div class="blog-date">2026 February 13</div>
+                    <h3>Facebook Account ආරක්ෂා කරගන්නේ කෙසේද?</h3>
+                    <p>Social media accounts hack වීම වලක්වා ගන්න essential security settings පිළිබඳ guide එකක්...</p>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </article>
+
+            <article class="blog-card fade-in">
+                <div class="blog-content">
+                    <div class="blog-date">2026 February 10</div>
+                    <h3>Email Phishing Scams හඳුනාගන්න</h3>
+                    <p>Banking emails, lottery scams, සහ fake login pages වලින් ආරක්ෂා වෙමු...</p>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </article>
+
+            <article class="blog-card fade-in">
+                <div class="blog-content">
+                    <div class="blog-date">2026 February 5</div>
+                    <h3>Free Antivirus Software Comparison</h3>
+                    <p>Windows Defender, Avast, Bitdefender - මොනවාද හොඳම option එක?</p>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Career Section -->
+    <section id="career">
+        <h2 class="section-title">🎯 Cybersecurity Career Guide</h2>
+        <div class="career-path fade-in">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Step 1: Foundations (3-6 months)</h4>
+                    <p>Networking basics, Linux, Python scripting, සහ security fundamentals ඉගෙන ගන්න.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Step 2: Certifications</h4>
+                    <p>CompTIA Security+, CEH (Certified Ethical Hacker), හෝ eJPT සමඟ start කරන්න.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Step 3: Hands-on Practice</h4>
+                    <p>TryHackMe, Hack The Box, සහ PortSwigger Web Security Academy භාවිතා කරන්න.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Step 4: Specialize</h4>
+                    <p>Penetration testing, SOC analyst, GRC, හෝ cloud security තෝරා ගන්න.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Step 5: Job Market</h4>
+                    <p>LinkedIn, cybersecurity job boards, සහ local companies වලට apply කරන්න.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="disclaimer">
+                <strong>⚠️ Legal Disclaimer:</strong> This website is for educational purposes only. 
+                All content teaches defensive cybersecurity. Unauthorized access to computer systems is illegal. 
+                Always practice ethical hacking with proper authorization only.
+            </div>
+            <p>&copy; 2026 CAZPER Academy. Learn Ethical Hacking Responsibly.</p>
+            <div class="social-links">
+                <a href="#">📧</a>
+                <a href="#">💬</a>
+                <a href="#">🐦</a>
+                <a href="#">📺</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Password Generator
+        function generatePassword() {
+            const length = 16;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            document.getElementById('generatedPassword').textContent = password;
+        }
+
+        function copyPassword() {
+            const password = document.getElementById('generatedPassword').textContent;
+            if (password !== "Click generate to create password") {
+                navigator.clipboard.writeText(password);
+                alert("Password copied to clipboard!");
+            }
+        }
+
+        // Password Strength Checker
+        function checkStrength() {
+            const password = document.getElementById('passwordInput').value;
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
+            
+            let strength = 0;
+            if (password.length > 6) strength++;
+            if (password.length > 10) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            bar.className = 'strength-bar';
+            
+            if (password.length === 0) {
+                text.textContent = "Enter a password to check strength";
+            } else if (strength < 3) {
+                bar.classList.add('strength-weak');
+                text.textContent = "Weak Password - Add more characters, numbers, and symbols";
+                text.style.color = "#ff0055";
+            } else if (strength < 5) {
+                bar.classList.add('strength-medium');
+                text.textContent = "Medium Strength - Good but could be better";
+                text.style.color = "#ffd93d";
+            } else {
+                bar.classList.add('strength-strong');
+                text.textContent = "Strong Password - Excellent security!";
+                text.style.color = "#00ff88";
+            }
+        }
+
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
